@@ -15,7 +15,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -25,8 +24,9 @@ SECRET_KEY = 'aqk1_6&t^jmuf=kwi2jx+g&ft=^@#!lhs1vf2yjbvdz=996*0-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+PROD = False
 
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'user',
 )
 
@@ -56,8 +58,7 @@ ROOT_URLCONF = 'pigeon.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,12 +77,30 @@ WSGI_APPLICATION = 'pigeon.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+from config import DB_INFO
+
+if PROD:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'pigeon',
+            'USER': DB_INFO['username'],
+            'PASSWORD': DB_INFO['password'],
+            'HOST': DB_INFO['hostname'],
+            'PORT': '3306',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'pigeon',
+            'USER': 'root',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '3306',
+        }
+    }
 
 
 # Internationalization
@@ -102,3 +121,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+from config import SMTP
+
+EMAIL_HOST = SMTP['hostname']
+EMAIL_PORT = SMTP['port']
+EMAIL_HOST_USER = SMTP['username']
+EMAIL_HOST_PASSWORD = SMTP['password']
+EMAIL_USE_SSL = False
