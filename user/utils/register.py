@@ -1,6 +1,6 @@
 __author__ = 'nliu'
 
-from user.models import User
+from user.models import UserInfo
 from user.models import Passcode
 from django.core.mail import send_mail
 from django.contrib.auth.models import User as django_user
@@ -14,12 +14,12 @@ class UserRegisterHelper(object):
 
     def register_new_user_by_email(self, vendor_id, vendor_type, password):
         try:
-            User.objects.get(vendor_id=vendor_id, vendor_type=vendor_type)
-        except User.DoesNotExist:
+            UserInfo.objects.get(vendor_id=vendor_id, vendor_type=vendor_type)
+        except UserInfo.DoesNotExist:
             self.__auth_register(vendor_id, password)
             img_url = ""
             nickname = vendor_id
-            User(
+            UserInfo(
                 vendor_id=vendor_id,
                 vendor_type=vendor_type,
                 user_id=vendor_id,
@@ -33,9 +33,9 @@ class UserRegisterHelper(object):
 
     def verify_passcode(self, user_id, passcode):
         try:
-            row = User.objects.get(user_id=user_id)
+            row = UserInfo.objects.get(user_id=user_id)
             is_active = row.is_active
-        except User.DoesNotExist:
+        except UserInfo.DoesNotExist:
             is_active = False
         try:
             row = Passcode.objects.get(user_id=user_id, passcode=passcode)

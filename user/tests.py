@@ -2,8 +2,12 @@ from django.test import TestCase
 
 # Create your tests here.
 
-import random
+from user.vendors.weibo_api import WeiboAPI
 
-if __name__ == '__main__':
-    passcode = "%d" % random.randrange(100000, 999999)
-    print(type(passcode))
+
+class UserTests(TestCase):
+    def test_weibo_get_user_info(self):
+        access_token = '2.00mTNwkC6hbjAE6b5dee438colhHzB'
+        uid = '2525851962'
+        user_info = WeiboAPI().get_user_info(access_token, uid)
+        print(user_info)

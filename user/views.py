@@ -7,9 +7,12 @@ from rest_framework.authentication import TokenAuthentication, BasicAuthenticati
 from rest_framework.decorators import authentication_classes, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from user.utils.register import UserRegisterHelper
+from user.utils.vendor_login import VendorLogin
 from django.contrib.auth.models import User as django_user
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework import status
 import json
 
 # Create your views here.
@@ -117,3 +120,28 @@ def check_existing_user_id(request):
 
 def resend_validation_passcode(request):
     pass
+
+
+
+@api_view(['GET'])
+def vendor_login(request):
+    vendor_type = request.GET['vendor_type']
+    vendor_id = request.GET['vendor_id']
+    access_token = request.GET['access_token']
+    user_id = VendorLogin(vendor_type, vendor_id, access_token).login()
+    if user_id:
+        try:
+            user = django_user.objects.get(username=user_id)
+        except django_user.DoesNotExist:
+            user = django_user.objects.create_user(username=user_id)
+        user.backend = "django.contrib.auth.backends.ModelBackend"
+        auth.login(request, user)
+        print(1)
+        token = Token.objects.get_or_create(user=user)[0].key
+        print(2)
+        data = dict(
+            token=token
+        )
+        return Response(data, status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)

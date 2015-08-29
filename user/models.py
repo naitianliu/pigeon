@@ -3,11 +3,10 @@ from django.db import models
 # Create your models here.
 
 
-class User(models.Model):
-    user_id = models.CharField(max_length=50)
-    vendor_id = models.CharField(max_length=100)
-    vendor_type = models.CharField(max_length=10)
+class UserInfo(models.Model):
+    user_id = models.CharField(max_length=100)
     img_url = models.TextField()
+    gender = models.CharField(max_length=1)
     nickname = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
     created_time = models.DateTimeField(auto_created=True)
@@ -15,6 +14,14 @@ class User(models.Model):
 
     def __unicode__(self):
         return self.user_id
+
+
+class Vendor(models.Model):
+    user_id = models.CharField(max_length=100)
+    vendor_id = models.CharField(max_length=100)
+    vendor_type = models.CharField(max_length=20)
+    is_active = models.BooleanField(default=True)
+    created_time = models.DateTimeField(auto_now=True)
 
 
 class Passcode(models.Model):

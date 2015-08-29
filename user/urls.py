@@ -10,7 +10,7 @@ urlpatterns = patterns('user.views',
     url(r'^verify_passcode/$', 'verify_passcode'),
     url(r'^login/$', 'login'),
     url(r'^logout/$', 'logout'),
+    url(r'^vendor_login/$', 'vendor_login'),
 
     url(r'^test/$', 'test'),
-
 )
