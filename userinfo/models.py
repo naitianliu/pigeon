@@ -10,7 +10,7 @@ class UserInfo(models.Model):
     nickname = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
     created_time = models.DateTimeField(auto_created=True)
-    last_login_time = models.DateTimeField(auto_created=True)
+    last_login_time = models.IntegerField()
 
     def __unicode__(self):
         return self.user_id

@@ -1,7 +1,7 @@
 __author__ = 'nliu'
 
-from user.models import UserInfo
-from user.models import Passcode
+from userinfo.models import UserInfo
+from userinfo.models import Passcode
 from django.core.mail import send_mail
 from django.contrib.auth.models import User as django_user
 import datetime

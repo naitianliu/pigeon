@@ -1,27 +1,32 @@
 __author__ = 'nliu'
 
 from boto.dynamodb2.table import Table
+import boto.dynamodb2
+from boto.dynamodb2.items import Item
+import config
 
 
 class Event(object):
     def __init__(self):
-        self.table = Table('Event')
-        self.table_post = Table('Post')
-        self.table_comment = Table('Comment')
+        conn = boto.dynamodb2.connect_to_region('us-east-1', )
+        self.table_event = Table('Event')
 
     def create_new_event(self, event_id, event_info):
-        self.table.put_item(data=dict(
+        print(event_id)
+        data = dict(
             event_id=event_id,
             info=event_info
-        ))
+        )
+        self.table_event.put_item(data=data)
+        # Item(self.table, data=data).save()
 
     def get_event_info_by_event_id(self, event_id):
-        event = self.table.get_item(event_id=event_id)
+        event = self.table_event.get_item(event_id=event_id)
         event_info = event['info']
         return event_info
 
     def update_event_info_by_event_id(self, event_id, event_info):
-        event = self.table.get_item(event_id=event_id)
+        event = self.table_event.get_item(event_id=event_id)
         event['info'] = event_info
         event.save()
 
@@ -31,7 +36,7 @@ class Event(object):
             keys.append(dict(
                 event_id=event_id
             ))
-        many_events = self.table.batch_get(keys=keys)
+        many_events = self.table_event.batch_get(keys=keys)
         event_info_list = []
         for event in many_events:
             event_info_list.append(event['info'])
@@ -55,9 +60,12 @@ class Comment(object):
 
 if __name__ == '__main__':
     obj = Event()
-    event_id = 0
-    event_id_list = []
-    event_id_list = map(str, range(1, 11))
-    print event_id_list
-    event_info_list = obj.batch_query_by_event_id_list(event_id_list)
-    print event_info_list
+    event_id = "32eaa4c0-56c2-11e5-b1a4-6003089edb3c12"
+    event_info = {
+        "description": "description",
+        "location": "location",
+        "address": "address",
+        "time": 1234,
+        "members": ["wb2525851962"]
+    }
+    Event().create_new_event(event_id, event_info)

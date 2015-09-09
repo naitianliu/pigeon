@@ -6,8 +6,8 @@ from django.contrib import auth
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication, SessionAuthentication
 from rest_framework.decorators import authentication_classes, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from user.utils.register import UserRegisterHelper
-from user.utils.vendor_login import VendorLogin
+from userinfo.utils.register import UserRegisterHelper
+from userinfo.utils.vendor_login import VendorLogin
 from django.contrib.auth.models import User as django_user
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
@@ -125,10 +125,12 @@ def resend_validation_passcode(request):
 
 @api_view(['GET'])
 def vendor_login(request):
+    print(1)
     vendor_type = request.GET['vendor_type']
     vendor_id = request.GET['vendor_id']
     access_token = request.GET['access_token']
     user_id = VendorLogin(vendor_type, vendor_id, access_token).login()
+    print(user_id)
     if user_id:
         try:
             user = django_user.objects.get(username=user_id)

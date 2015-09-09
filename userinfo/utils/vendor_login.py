@@ -1,7 +1,8 @@
 __author__ = 'nliu'
 
-from user.vendors.weibo_api import WeiboAPI
-from user.models import UserInfo, Vendor
+from userinfo.vendors.weibo_api import WeiboAPI
+from userinfo.models import UserInfo, Vendor
+import time
 
 '''vendor type: wb, wx, qq'''
 
@@ -11,6 +12,7 @@ class VendorLogin(object):
         self.vendor_type = vendor_type
         self.vendor_id = vendor_id
         self.access_token = access_token
+        self.current_time = int(time.time())
 
     def login(self):
         if self.vendor_type == 'wb':
@@ -39,7 +41,8 @@ class VendorLogin(object):
                         img_url=img_url,
                         gender=gender,
                         nickname=nickname,
-                        is_active=True
+                        is_active=True,
+                        last_login_time=self.current_time
                     ).save()
             return user_id
         else:

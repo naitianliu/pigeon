@@ -2,7 +2,7 @@ from django.test import TestCase
 
 # Create your tests here.
 
-from user.vendors.weibo_api import WeiboAPI
+from userinfo.vendors.weibo_api import WeiboAPI
 
 
 class UserTests(TestCase):

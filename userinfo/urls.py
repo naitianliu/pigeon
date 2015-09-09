@@ -3,7 +3,7 @@ __author__ = 'nliu'
 
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('user.views',
+urlpatterns = patterns('userinfo.views',
 
     url(r'^$', 'user'),
     url(r'^register/$', 'user_register'),
