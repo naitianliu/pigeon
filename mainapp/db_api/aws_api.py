@@ -1,14 +1,10 @@
 __author__ = 'nliu'
 
 from boto.dynamodb2.table import Table
-import boto.dynamodb2
-from boto.dynamodb2.items import Item
-import config
 
 
 class Event(object):
     def __init__(self):
-        conn = boto.dynamodb2.connect_to_region('us-east-1', )
         self.table_event = Table('Event')
 
     def create_new_event(self, event_id, event_info):
@@ -18,7 +14,6 @@ class Event(object):
             info=event_info
         )
         self.table_event.put_item(data=data)
-        # Item(self.table, data=data).save()
 
     def get_event_info_by_event_id(self, event_id):
         event = self.table_event.get_item(event_id=event_id)
@@ -52,6 +47,35 @@ class Post(object):
     def __init__(self):
         self.table = Table('Post')
 
+    def create(self, post_id, post_info):
+        data = dict(
+            post_id=post_id,
+            info=post_info
+        )
+        self.table.put_item(data=data)
+
+    def get(self, post_id):
+        post = self.table.get_item(post_id=post_id)
+        post_info = post['info']
+        return post_info
+
+    def update(self, post_id, post_info):
+        post = self.table.get_item(post_id=post_id)
+        post['info'] = post_info
+        post.save()
+
+    def batch_query(self, post_id_list):
+        keys = []
+        for post_id in post_id_list:
+            keys.append(dict(
+                post_id=post_id
+            ))
+        many_posts = self.table.batch_get(keys=keys)
+        post_info_list = []
+        for post in many_posts:
+            post_info_list.append(post['info'])
+        return post_info_list
+
 
 class Comment(object):
     def __init__(self):
@@ -59,8 +83,7 @@ class Comment(object):
 
 
 if __name__ == '__main__':
-    obj = Event()
-    event_id = "32eaa4c0-56c2-11e5-b1a4-6003089edb3c12"
+    post_id = "4"
     event_info = {
         "description": "description",
         "location": "location",
@@ -68,4 +91,4 @@ if __name__ == '__main__':
         "time": 1234,
         "members": ["wb2525851962"]
     }
-    Event().create_new_event(event_id, event_info)
+    print Post().get(post_id)

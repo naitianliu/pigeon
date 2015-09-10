@@ -35,10 +35,8 @@ def create_new_event(request):
             time=time,
             member_id_list=member_id_list,
         )
-        print(1)
         EventHelper().create_new_event(event_info, member_id_list)
-        print(2)
-        return Response(data=dict(result="success"), status=status.HTTP_204_NO_CONTENT)
+        return Response(data=dict(result="success"), status=status.HTTP_200_OK)
     except Exception as err:
         print(err)
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
