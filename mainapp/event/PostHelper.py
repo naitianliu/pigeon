@@ -23,7 +23,27 @@ class PostHelper(object):
         ).save()
 
     def get_post_list_by_event_id(self, event_id, from_time=None, to_time=None):
-        pass
+        post_id_list = []
+        if not from_time:
+            from_time = 0
+        if not to_time:
+            to_time = self.__current_time
+        for row in EventPost.objects.filter(event_id=event_id, created_time__gte=from_time, created_time__lte=to_time):
+            post_id_list.append(row.post_id)
+            if len(post_id_list) >= 20:
+                break
+        post_info_list = aws_api.Post().batch_query(post_id_list)
+        return post_info_list
 
-    def get_post_list_by_user_id(self, user_id, from_time=None, to_time=None):
-        pass
+    def get_post_list_by_user_id(self, from_time=None, to_time=None):
+        post_id_list = []
+        if not from_time:
+            from_time = 0
+        if not to_time:
+            to_time = self.__current_time
+        for row in EventPost.objects.filter(user_id=self.user_id, created_time__gte=from_time, created_time__lte=to_time):
+            post_id_list.append(row.post_id)
+            if len(post_id_list) >= 20:
+                break
+        post_info_list = aws_api.Post().batch_query(post_id_list)
+        return post_info_list

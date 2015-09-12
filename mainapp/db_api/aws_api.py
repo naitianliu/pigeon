@@ -81,6 +81,35 @@ class Comment(object):
     def __init__(self):
         self.table = Table('Comment')
 
+    def create(self, comment_id, comment_info):
+        data = dict(
+            comment_id=comment_id,
+            info=comment_info
+        )
+        self.table.put_item(data=data)
+
+    def get(self, comment_id):
+        comment = self.table.get_item(comment_id=comment_id)
+        comment_info = comment['info']
+        return comment_info
+
+    def update(self, comment_id, comment_info):
+        comment = self.table.get_item(comment_id=comment_id)
+        comment['info'] = comment_info
+        comment.save()
+
+    def batch_query(self, comment_id_list):
+        keys = []
+        for comment_id in comment_id_list:
+            keys.append(dict(
+                comment_id=comment_id
+            ))
+        many_comments = self.table.batch_get(keys=keys)
+        comment_info_list = []
+        for comment in many_comments:
+            comment_info_list.append(comment['info'])
+        return comment_info_list
+
 
 if __name__ == '__main__':
     post_id = "4"
