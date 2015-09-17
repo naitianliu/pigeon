@@ -22,11 +22,12 @@ def user(request):
     return HttpResponse("user api")
 
 
-@api_view(['GET'])
-@authentication_classes((BasicAuthentication, TokenAuthentication))
-@permission_classes((IsAuthenticated,))
 def test(request):
-    print(request.user.username)
+    from mainapp.utils.notification_helper import NotificationHelper
+    device_token = "2F79378100B67B4CABB83F03AE52493120D73B6F0BE848FE3899BFCCE49A4352"
+    message = "hello!"
+    button_title = "Confirm"
+    NotificationHelper(device_token).send_notification_with_custome_button(message, button_title)
     return HttpResponse(json.dumps(dict(result="OK")), content_type="application/json")
 
 
