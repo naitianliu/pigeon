@@ -130,7 +130,10 @@ def vendor_login(request):
     vendor_type = request.GET['vendor_type']
     vendor_id = request.GET['vendor_id']
     access_token = request.GET['access_token']
-    user_id = VendorLogin(vendor_type, vendor_id, access_token).login()
+    try:
+        user_id = VendorLogin(vendor_type, vendor_id, access_token).login()
+    except Exception as err:
+        print err
     print(user_id)
     if user_id:
         try:

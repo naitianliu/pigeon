@@ -11,6 +11,7 @@ from userinfo.utils.userinfo_helper import UserInfoHelper
 from mainapp.event.EventHelper import EventHelper
 from mainapp.event.PostHelper import PostHelper
 from mainapp.event.CommentHelper import CommentHelper
+from userinfo.utils.userinfo_helper import UserInfoHelper
 import json
 
 # Create your views here.
@@ -25,14 +26,15 @@ def create_new_event(request):
         user_id = request.user.username
         description = post_data['description']
         location = post_data['location']
-        address = post_data['address']
         time = post_data['time']
         member_id_list = post_data['members']
+        if user_id not in member_id_list:
+            member_id_list.append(user_id)
         event_info = dict(
             creator_id=user_id,
+            creator_info=UserInfoHelper().get_user_info(user_id),
             description=description,
             location=location,
-            address=address,
             time=time,
             member_id_list=member_id_list,
         )

@@ -35,6 +35,7 @@ class EventHelper(object):
             if len(event_id_list) >= 20:
                 break
         event_info_list = aws_api.Event().batch_query_by_event_id_list(event_id_list)
+
         return event_info_list
 
     def add_remove_members(self, event_id, user_id, new_member_list):

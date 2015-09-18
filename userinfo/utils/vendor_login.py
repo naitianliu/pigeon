@@ -33,17 +33,24 @@ class VendorLogin(object):
                     vendor_type=self.vendor_type,
                     is_active=True
                 ).save()
-                try:
-                    UserInfo.objects.get(user_id=user_id)
-                except UserInfo.DoesNotExist:
-                    UserInfo(
-                        user_id=user_id,
-                        img_url=img_url,
-                        gender=gender,
-                        nickname=nickname,
-                        is_active=True,
-                        last_login_time=self.current_time
-                    ).save()
+            try:
+                row = UserInfo.objects.get(user_id=user_id)
+                row.img_url = img_url,
+                row.gender = gender,
+                row.nickname = nickname
+                row.is_active = True,
+                row.last_login_time = self.current_time
+                row.save()
+            except UserInfo.DoesNotExist:
+                UserInfo(
+                    user_id=user_id,
+                    img_url=img_url,
+                    gender=gender,
+                    nickname=nickname,
+                    is_active=True,
+                    created_time=self.current_time,
+                    last_login_time=self.current_time
+                ).save()
             return user_id
         else:
             return ""
