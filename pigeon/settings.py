@@ -40,7 +40,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'userinfo',
-    'mainapp'
+    'mainapp',
+    'contacts'
 )
 
 MIDDLEWARE_CLASSES = (

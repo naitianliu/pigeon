@@ -23,5 +23,7 @@ urlpatterns = [
 
     url(r'^main/', include('mainapp.urls')),
 
+    url(r'^contacts/', include('contacts.urls')),
+
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

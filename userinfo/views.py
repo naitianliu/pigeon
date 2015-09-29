@@ -123,18 +123,16 @@ def resend_validation_passcode(request):
     pass
 
 
-
 @api_view(['GET'])
 def vendor_login(request):
-    print(1)
     vendor_type = request.GET['vendor_type']
     vendor_id = request.GET['vendor_id']
     access_token = request.GET['access_token']
     try:
         user_id = VendorLogin(vendor_type, vendor_id, access_token).login()
     except Exception as err:
+        user_id = ""
         print err
-    print(user_id)
     if user_id:
         try:
             user = django_user.objects.get(username=user_id)
@@ -142,9 +140,7 @@ def vendor_login(request):
             user = django_user.objects.create_user(username=user_id)
         user.backend = "django.contrib.auth.backends.ModelBackend"
         auth.login(request, user)
-        print(1)
         token = Token.objects.get_or_create(user=user)[0].key
-        print(2)
         data = dict(
             token=token
         )
