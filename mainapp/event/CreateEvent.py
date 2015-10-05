@@ -1,7 +1,7 @@
 __author__ = 'nliu'
 
 from mainapp.db_api import aws_api
-from mainapp.models import UserEvent
+from mainapp.event.db_operate import EventDBOperation
 import uuid
 import time
 
@@ -23,7 +23,9 @@ class CreateEventHelper(object):
             todo_list=todo_list,
             members=members,
             time=time_dict,
-            location=location_dict
+            location=location_dict,
+            member_status=dict.fromkeys(members, 0),
+            status=0
         )
         self.__create(event_info, members)
         return self.__event_id
@@ -48,7 +50,9 @@ class CreateEventHelper(object):
             reminder_content=content,
             receivers=receivers,
             time_dict=time_dict,
-            location_dict=location_dict
+            location_dict=location_dict,
+            receiver_status=dict.fromkeys(receivers, 0),
+            status=0
         )
         self.__create(event_info, receivers)
         return self.__event_id
@@ -60,6 +64,7 @@ class CreateEventHelper(object):
             created_time=self.__current_time,
             activity_description=description,
             members=members,
+            notification_list=[],
             time=time_dict,
             location=location_dict
         )
@@ -69,14 +74,4 @@ class CreateEventHelper(object):
     def __create(self, event_info, members):
         aws_api.Event().create_new_event(self.__event_id, event_info)
         user_id_list = members + [self.__creator_id]
-        bulk_list = []
-        for user_id in user_id_list:
-            bulk_list.append(UserEvent(
-                user_id=user_id,
-                event_id=self.__event_id,
-                event_type=self.__event_type,
-                is_complete=False,
-                is_updated=True,
-                created_time=self.__current_time
-            ))
-        UserEvent.objects.bulk_create(bulk_list)
+        EventDBOperation().bulk_create_new_event_per_user(self.__event_id, self.__event_type, user_id_list)

@@ -24,3 +24,9 @@ class PostComment(models.Model):
     comment_id = models.CharField(max_length=50)
     user_id = models.CharField(max_length=50)
     created_time = models.IntegerField()
+
+
+class Comment(models.Model):
+    event_id = models.CharField(max_length=50)
+    content = models.TextField()
+    created_time = models.IntegerField()

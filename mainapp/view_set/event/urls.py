@@ -11,9 +11,20 @@ urlpatterns = patterns('mainapp.view_set.event',
     url(r'^task/exit/$', 'task.exit_task'),
 
     url(r'^topic/create/$', 'topic.create_topic'),
+    url(r'^topic/invite_members/$', 'topic.invite_members_to_topic'),
+    url(r'^topic/exit/$', 'topic.exit_topic'),
 
     url(r'^reminder/create/$', 'reminder.create_reminder'),
+    url(r'^reminder/change_receivers/$', 'reminder.change_receivers'),
+    url(r'^reminder/complete_reminder/$', 'reminder.complete_reminder_by_receiver'),
+    url(r'^reminder/revoke_reminder/$', 'reminder.revoke_reminder_by_creator'),
+    url(r'^reminder/delay_reminder/$', 'reminder.delay_reminder_by_receiver'),
+    url(r'^reminder/reject_reminder/$', 'reminder.reject_reminder_by_receiver'),
+    url(r'^reminder/resend_reminder/$', 'reminder.resend_reminder_by_creator'),
 
     url(r'^activity/create/$', 'activity.create_activity'),
+    url(r'^activity/invite_members/$', 'activity.invite_members_to_activity'),
+    url(r'^activity/exit/$', 'activity.exit_activity'),
+    url(r'^activity/notify/$', 'activity.post_notification'),
 
 )

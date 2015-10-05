@@ -1,3 +1,5 @@
 pip install djangorestframework
 pip install markdown
 easy_install apns
+pip install boto
+python == 2.7.10
