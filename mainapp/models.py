@@ -6,7 +6,9 @@ from django.db import models
 class UserEvent(models.Model):
     user_id = models.CharField(max_length=100)
     event_id = models.CharField(max_length=50)
-    is_complete = models.BooleanField()
+    event_type = models.CharField(max_length=30, default="unknown")
+    is_complete = models.BooleanField(default=False)
+    is_updated = models.BooleanField(default=True)
     created_time = models.IntegerField()
 
 

@@ -1,6 +1,7 @@
 __author__ = 'nliu'
 
 from userinfo.models import UserInfo
+from userinfo.models import DeviceToken
 
 
 class UserInfoHelper(object):
@@ -33,3 +34,9 @@ class UserInfoHelper(object):
                 gender=row.gender
             ))
         return user_info_list
+
+    def get_device_token_list_by_users(self, user_id_list):
+        device_token_list = []
+        for row in DeviceToken.objects.filter(user_id__in=user_id_list):
+            device_token_list.append(row.device_token)
+        return device_token_list

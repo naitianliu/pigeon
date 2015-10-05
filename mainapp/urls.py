@@ -1,7 +1,6 @@
 __author__ = 'nliu'
 
-
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 
 urlpatterns = patterns('mainapp.views',
 
@@ -13,5 +12,8 @@ urlpatterns = patterns('mainapp.views',
 
     url(r'^create_new_comment/$', 'create_new_comment'),
     url(r'^get_comment_list/$', 'get_comment_list'),
+
+
+    url(r'^event/', include('mainapp.view_set.event.urls')),
 
 )
