@@ -29,6 +29,22 @@ class EventDBOperation(object):
             created_time=self.__current_time
         ).save()
 
+    def get_comments_by_event_id_list(self, event_id_list):
+        comments_dict = dict()
+        for row in Comment.objects.filter(event_id__in=event_id_list):
+            event_id = row.event_id
+            if event_id in comments_dict:
+                comments_dict[event_id].append(dict(
+                    content=row.content,
+                    time=row.created_time
+                ))
+            else:
+                comments_dict[event_id] = [dict(
+                    content=row.content,
+                    time=row.created_time
+                )]
+        return comments_dict
+
     def remove_event_per_user(self, event_id, user_id):
         UserEvent.objects.filter(event_id=event_id, user_id=user_id).delete()
 
@@ -40,3 +56,9 @@ class EventDBOperation(object):
             UserEvent.objects.filter(event_id=event_id, user_id__in=target_user_id_list).update(is_updated=True)
         else:
             UserEvent.objects.filter(event_id=event_id).update(is_updated=True)
+
+    def get_updated_event_id_list(self, user_id):
+        event_id_list = []
+        for row in UserEvent.objects.filter(user_id=user_id, is_updated=True):
+            event_id_list.append(row.event_id)
+        return event_id_list

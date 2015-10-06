@@ -34,7 +34,10 @@ class Event(object):
         many_events = self.table_event.batch_get(keys=keys)
         event_info_list = []
         for event in many_events:
-            event_info_list.append(event['info'])
+            event_info_list.append(dict(
+                event_id=event['event_id'],
+                info=event['info']
+            ))
         return event_info_list
 
 

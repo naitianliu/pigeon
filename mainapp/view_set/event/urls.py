@@ -27,4 +27,7 @@ urlpatterns = patterns('mainapp.view_set.event',
     url(r'^activity/exit/$', 'activity.exit_activity'),
     url(r'^activity/notify/$', 'activity.post_notification'),
 
+    url(r'^list/updated_events/$', 'list_events.get_all_updated_events_list'),
+    url(r'^list/event_info/$', 'list_events.get_event_info'),
+
 )

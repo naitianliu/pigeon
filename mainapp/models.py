@@ -11,6 +11,9 @@ class UserEvent(models.Model):
     is_updated = models.BooleanField(default=True)
     created_time = models.IntegerField()
 
+    def __unicode__(self):
+        return self.event_id
+
 
 class EventPost(models.Model):
     event_id = models.CharField(max_length=50)
@@ -30,3 +33,6 @@ class Comment(models.Model):
     event_id = models.CharField(max_length=50)
     content = models.TextField()
     created_time = models.IntegerField()
+
+    def __unicode__(self):
+        return self.content

@@ -1,7 +1,8 @@
 __author__ = 'nliu'
 
 from boto.dynamodb2.table import Table
-from mainapp.event.db_operate import EventDBOperation
+
+from mainapp.db_api.db_operate import EventDBOperation
 
 EVENT_TYPE = "reminder"
 
@@ -25,7 +26,7 @@ class ReminderOperation(object):
 
     def complete_reminder_by_receiver(self, message=None):
         creator_id = self.event_item['info']['creator_id']
-        self.event_item['info']['receiver_status'] = 1
+        self.event_item['info']['receiver_status'][self.__user_id] = 1
         self.event_item.partial_save()
         if message:
             self.db_event.save_comment_by_event_id(self.__event_id, message)
@@ -45,7 +46,7 @@ class ReminderOperation(object):
 
     def delay_reminder_by_receiver(self, message=None):
         creator_id = self.event_item['info']['creator_id']
-        self.event_item['info']['receiver_status'] = 2
+        self.event_item['info']['receiver_status'][self.__user_id] = 2
         self.event_item.partial_save()
         if message:
             self.db_event.save_comment_by_event_id(self.__event_id, message)
@@ -54,7 +55,7 @@ class ReminderOperation(object):
 
     def reject_reminder_by_receiver(self, message=None):
         creator_id = self.event_item['info']['creator_id']
-        self.event_item['info']['receiver_status'] = 3
+        self.event_item['info']['receiver_status'][self.__user_id] = 3
         self.event_item.partial_save()
         if message:
             self.db_event.save_comment_by_event_id(self.__event_id, message)

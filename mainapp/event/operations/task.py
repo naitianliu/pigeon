@@ -1,8 +1,8 @@
 __author__ = 'nliu'
 
 from boto.dynamodb2.table import Table
-from mainapp.event.db_operate import EventDBOperation
-import time
+
+from mainapp.db_api.db_operate import EventDBOperation
 
 EVENT_TYPE = "task"
 

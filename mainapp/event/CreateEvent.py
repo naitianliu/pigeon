@@ -1,9 +1,10 @@
 __author__ = 'nliu'
 
-from mainapp.db_api import aws_api
-from mainapp.event.db_operate import EventDBOperation
 import uuid
 import time
+
+from mainapp.db_api import aws_api
+from mainapp.db_api.db_operate import EventDBOperation
 
 
 class CreateEventHelper(object):
