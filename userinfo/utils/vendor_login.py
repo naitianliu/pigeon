@@ -37,6 +37,7 @@ class VendorLogin(object):
                 row = UserInfo.objects.get(user_id=user_id)
                 row.img_url = img_url,
                 row.gender = gender,
+                print(gender)
                 row.nickname = nickname
                 row.is_active = True,
                 row.last_login_time = self.current_time

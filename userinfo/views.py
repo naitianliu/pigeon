@@ -87,7 +87,6 @@ def login(request):
             res_data = dict(
                 result="success",
                 message=message,
-                #token=request.session.session_key
                 token=Token.objects.get_or_create(user=user)[0].key
             )
         else:
@@ -142,6 +141,7 @@ def vendor_login(request):
         auth.login(request, user)
         token = Token.objects.get_or_create(user=user)[0].key
         data = dict(
+            user_id=user_id,
             token=token
         )
         return Response(data, status=status.HTTP_200_OK)

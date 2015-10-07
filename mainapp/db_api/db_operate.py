@@ -2,6 +2,7 @@ __author__ = 'nliu'
 
 from mainapp.models import UserEvent
 from mainapp.models import Comment
+from userinfo.utils.userinfo_helper import UserInfoHelper
 import time
 
 
@@ -22,9 +23,11 @@ class EventDBOperation(object):
             ))
         UserEvent.objects.bulk_create(bulk_list)
 
-    def save_comment_by_event_id(self, event_id, content):
+    def save_comment_by_event_id(self, event_id, user_id, action=None, content=None):
         Comment(
             event_id=event_id,
+            user_id=user_id,
+            action=action,
             content=content,
             created_time=self.__current_time
         ).save()
@@ -33,13 +36,19 @@ class EventDBOperation(object):
         comments_dict = dict()
         for row in Comment.objects.filter(event_id__in=event_id_list):
             event_id = row.event_id
+            editor_user_id = row.user_id
+            editor_info = UserInfoHelper().get_user_info(user_id=editor_user_id)
             if event_id in comments_dict:
                 comments_dict[event_id].append(dict(
+                    editor_info=editor_info,
+                    action=row.action,
                     content=row.content,
                     time=row.created_time
                 ))
             else:
                 comments_dict[event_id] = [dict(
+                    editor_info=editor_info,
+                    action=row.action,
                     content=row.content,
                     time=row.created_time
                 )]

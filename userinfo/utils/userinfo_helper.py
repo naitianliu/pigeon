@@ -12,7 +12,7 @@ class UserInfoHelper(object):
         try:
             row = UserInfo.objects.get(user_id=user_id)
             img_url = row.img_url
-            gender = row.img_url
+            gender = row.gender
             nickname = row.nickname
             info = dict(
                 user_id=user_id,

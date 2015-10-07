@@ -6,7 +6,7 @@ from django.db import models
 class UserInfo(models.Model):
     user_id = models.CharField(max_length=100)
     img_url = models.TextField()
-    gender = models.CharField(max_length=1)
+    gender = models.CharField(max_length=10)
     nickname = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
     created_time = models.DateTimeField(auto_created=True, auto_now=True)

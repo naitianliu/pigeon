@@ -31,7 +31,9 @@ class PostComment(models.Model):
 
 class Comment(models.Model):
     event_id = models.CharField(max_length=50)
-    content = models.TextField()
+    user_id = models.CharField(max_length=100, default="")
+    action = models.IntegerField(null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
     created_time = models.IntegerField()
 
     def __unicode__(self):

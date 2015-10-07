@@ -5,11 +5,13 @@ import time
 
 from mainapp.db_api import aws_api
 from mainapp.db_api.db_operate import EventDBOperation
+from userinfo.utils.userinfo_helper import UserInfoHelper
 
 
 class CreateEventHelper(object):
     def __init__(self, user_id, event_type):
         self.__creator_id = user_id
+        self.__creator_info = UserInfoHelper().get_user_info(self.__creator_id)
         self.__event_type = event_type
         self.__current_time = int(time.time())
         self.__event_id = str(uuid.uuid1())
@@ -46,10 +48,11 @@ class CreateEventHelper(object):
     def create_reminder(self, content, receivers, time_dict, location_dict):
         event_info = dict(
             creator_id=self.__creator_id,
+            creator_info=self.__creator_info,
             event_type=self.__event_type,
             created_time=self.__current_time,
             reminder_content=content,
-            receivers=receivers,
+            receivers=UserInfoHelper().get_user_info_list(receivers),
             time_dict=time_dict,
             location_dict=location_dict,
             receiver_status=dict.fromkeys(receivers, 0),

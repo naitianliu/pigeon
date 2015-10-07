@@ -28,18 +28,16 @@ class ReminderOperation(object):
         creator_id = self.event_item['info']['creator_id']
         self.event_item['info']['receiver_status'][self.__user_id] = 1
         self.event_item.partial_save()
-        if message:
-            self.db_event.save_comment_by_event_id(self.__event_id, message)
+        self.db_event.save_comment_by_event_id(self.__event_id, self.__user_id, action=1, content=message)
         self.db_event.update_event_to_new(self.__event_id)
         return creator_id
 
     def revoke_reminder_by_creator(self, message=None):
         creator_id = self.event_item['info']['creator_id']
         receivers = self.event_item['info']['receivers']
-        self.event_item['info']['status'] = 1
+        self.event_item['info']['status'] = 5
         self.event_item.partial_save()
-        if message:
-            self.db_event.save_comment_by_event_id(self.__event_id, message)
+        self.db_event.save_comment_by_event_id(self.__event_id, self.__user_id, action=5, content=message)
         user_id_list = receivers + [self.__user_id]
         self.db_event.remove_event_per_user(self.__event_id, user_id_list)
         return creator_id
@@ -48,8 +46,7 @@ class ReminderOperation(object):
         creator_id = self.event_item['info']['creator_id']
         self.event_item['info']['receiver_status'][self.__user_id] = 2
         self.event_item.partial_save()
-        if message:
-            self.db_event.save_comment_by_event_id(self.__event_id, message)
+        self.db_event.save_comment_by_event_id(self.__event_id, self.__user_id, action=2, content=message)
         self.db_event.update_event_to_new(self.__event_id)
         return creator_id
 
@@ -57,17 +54,15 @@ class ReminderOperation(object):
         creator_id = self.event_item['info']['creator_id']
         self.event_item['info']['receiver_status'][self.__user_id] = 3
         self.event_item.partial_save()
-        if message:
-            self.db_event.save_comment_by_event_id(self.__event_id, message)
+        self.db_event.save_comment_by_event_id(self.__event_id, self.__user_id, action=3, content=message)
         self.db_event.update_event_to_new(self.__event_id)
         self.db_event.remove_event_per_user(self.__event_id, self.__user_id)
         return creator_id
 
     def resend_reminder_by_creator(self, message=None):
         creator_id = self.event_item['info']['creator_id']
-        self.event_item['info']['status'] = 2
+        self.event_item['info']['status'] = 6
         self.event_item.partial_save()
-        if message:
-            self.db_event.save_comment_by_event_id(self.__event_id, message)
+        self.db_event.save_comment_by_event_id(self.__event_id, self.__user_id, action=6, content=message)
         self.db_event.update_event_to_new(self.__event_id)
         return creator_id
