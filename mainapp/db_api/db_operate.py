@@ -38,20 +38,18 @@ class EventDBOperation(object):
             event_id = row.event_id
             editor_user_id = row.user_id
             editor_info = UserInfoHelper().get_user_info(user_id=editor_user_id)
+            content = row.content
+            info_dict = dict(
+                editor_info=editor_info,
+                action=row.action,
+                time=row.created_time
+            )
+            if content:
+                info_dict['content'] = content
             if event_id in comments_dict:
-                comments_dict[event_id].append(dict(
-                    editor_info=editor_info,
-                    action=row.action,
-                    content=row.content,
-                    time=row.created_time
-                ))
+                comments_dict[event_id].append(info_dict)
             else:
-                comments_dict[event_id] = [dict(
-                    editor_info=editor_info,
-                    action=row.action,
-                    content=row.content,
-                    time=row.created_time
-                )]
+                comments_dict[event_id] = [info_dict]
         return comments_dict
 
     def remove_event_per_user(self, event_id, user_id):

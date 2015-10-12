@@ -24,6 +24,7 @@ class VendorLogin(object):
             nickname = user_info['nickname']
             img_url = user_info['profile_img_url']
             gender = user_info['gender']
+            print(img_url)
             try:
                 Vendor.objects.get(vendor_id=self.vendor_id, vendor_type=self.vendor_type)
             except Vendor.DoesNotExist:
@@ -35,13 +36,13 @@ class VendorLogin(object):
                 ).save()
             try:
                 row = UserInfo.objects.get(user_id=user_id)
-                row.img_url = img_url,
-                row.gender = gender,
-                print(gender)
+                row.img_url = img_url
+                row.gender = gender
                 row.nickname = nickname
-                row.is_active = True,
+                row.is_active = True
                 row.last_login_time = self.current_time
                 row.save()
+                print(row.img_url)
             except UserInfo.DoesNotExist:
                 UserInfo(
                     user_id=user_id,

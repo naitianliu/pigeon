@@ -7,6 +7,7 @@ from rest_framework.authentication import TokenAuthentication, BasicAuthenticati
 from rest_framework.decorators import authentication_classes, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from userinfo.utils.register import UserRegisterHelper
+from userinfo.utils.userinfo_helper import UserInfoHelper
 from userinfo.utils.vendor_login import VendorLogin
 from django.contrib.auth.models import User as django_user
 from django.contrib.auth import authenticate
@@ -140,9 +141,12 @@ def vendor_login(request):
         user.backend = "django.contrib.auth.backends.ModelBackend"
         auth.login(request, user)
         token = Token.objects.get_or_create(user=user)[0].key
+        userInfo = UserInfoHelper().get_user_info(user_id)
         data = dict(
             user_id=user_id,
-            token=token
+            token=token,
+            nickname=userInfo['nickname'],
+            img_url=userInfo['img_url']
         )
         return Response(data, status=status.HTTP_200_OK)
     else:
